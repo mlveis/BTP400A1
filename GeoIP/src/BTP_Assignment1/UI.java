@@ -27,14 +27,14 @@ import Provider.GoogleMapsStatic.*;
 import java.awt.GridLayout;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-public class UI extends JFrame implements ActionListener,ChangeListener {
+public class UI extends JFrame implements ActionListener,ChangeListener,ItemListener {
 	//Swing Components
 	private JPanel pLeft,pRight,pRightUp,pRightDown;
 	private JButton bMoveUp,bMoveLeft,bMoveDown,bMoveRight,btnQuit;
 	private JTextField tfLatitude,tfLongitude,tfZoomValue;
     private JSlider sZoom;
 	private JLabel lblLeftTitle,lblRightTitle,lblLatitude,lblLongtitude,lblZoomValue,lblCityList,lblMessage;
-	
+	private JComboBox cbCities;
 	//Variables
 	private BigDecimal lat,lon;
 	private int zoom;
@@ -46,7 +46,7 @@ public class UI extends JFrame implements ActionListener,ChangeListener {
 		
 		this.lat = new BigDecimal(43.652527).setScale(6, RoundingMode.HALF_UP);
 		this.lon = new BigDecimal(-79.381961).setScale(6, RoundingMode.HALF_UP);
-		this.zoom = 15;
+		this.zoom = 12;
 		this.getContentPane().setLayout(null);
 		
 		//JPanel Left - for map display
@@ -189,8 +189,9 @@ public class UI extends JFrame implements ActionListener,ChangeListener {
 		lblMessageTitle.setBounds(10, 168, 87, 14);
 		pRightDown.add(lblMessageTitle);
 		
-		String cities[] = {"Toronto","Quebec","Waterloo"};
-		JComboBox cbCities = new JComboBox(cities);
+		String cities[] = {"Select city:","Toronto","Quebec","Vancouver"};
+		cbCities = new JComboBox(cities);
+		cbCities.addItemListener(this);
 		cbCities.setBounds(107, 86, 138, 20);
 		pRightDown.add(cbCities);
 				
@@ -270,5 +271,29 @@ public class UI extends JFrame implements ActionListener,ChangeListener {
 			}
 		}
 		
+	}
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if(cbCities.getSelectedIndex()==1){	
+			//toronto latitude : 43.652527 longitude : -79.381961
+			lblMessage.setText("Toronto");
+			this.lat = new BigDecimal(43.652527).setScale(6,RoundingMode.HALF_UP);
+			this.lon = new BigDecimal(-79.381961).setScale(6,RoundingMode.HALF_UP);
+			this.paintMap();
+		}
+		if(cbCities.getSelectedIndex()==2){
+			//quebec Latitude = 46.802071 Longitude = -71.244926
+			lblMessage.setText("Quebec");
+			this.lat = new BigDecimal(46.802071).setScale(6,RoundingMode.HALF_UP);
+			this.lon = new BigDecimal(-71.244926).setScale(6,RoundingMode.HALF_UP);
+			this.paintMap();
+		}
+		if(cbCities.getSelectedIndex()==3){
+			//Vancouver Latitude: 49.263590 Longitude: -123.138570
+			lblMessage.setText("Vancouver");
+			this.lat = new BigDecimal(49.263590).setScale(6,RoundingMode.HALF_UP);
+			this.lon = new BigDecimal(-123.138570).setScale(6,RoundingMode.HALF_UP);
+			this.paintMap();
+		}	
 	}
 }
